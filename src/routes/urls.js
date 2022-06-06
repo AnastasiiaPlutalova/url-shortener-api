@@ -1,16 +1,12 @@
-const express = require('express')
-const router = express.Router()
-
-const  { 
+import express from 'express';
+import {
     getUrl, // gets url by id
-    createUrl, // add url to db {originalUrl, shortenUrl, stat: [{date, clicks}]}
+    createUrl, // add url to db {originalUrl, hash, stat: [{date, clicks}]}
     updateUrl, // update stat
     deleteUrl,
-    shortenUrl, // returns hash
-} = require('../controllers/urls.js')
+} from '../controllers/urls.js';
 
-
-router.post('/shorten-url', shortenUrl);
+const router = express.Router();
 
 router.get('/:urlHash', getUrl);
 
@@ -20,4 +16,4 @@ router.put('/:urlHash', updateUrl);
 
 router.delete('/:urlHash', deleteUrl);
 
-module.exports = router;
+export default router;

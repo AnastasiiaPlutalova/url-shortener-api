@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get('/:urlHash', getUrl);
 
-router.post('/', createUrl);
+router.post('/', createUrl); // check if url exists and use update url 
 
 router.put('/:urlHash', updateUrl);
 

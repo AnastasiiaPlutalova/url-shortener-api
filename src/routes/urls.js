@@ -8,7 +8,7 @@ import {
 
 const router = express.Router();
 
-router.get('/:urlHash', getUrl);
+router.get('/', getUrl);
 
 router.post('/', createUrl); // check if url exists and use update url 
 

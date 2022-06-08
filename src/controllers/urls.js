@@ -10,12 +10,17 @@ const db = new Low(adapter);
 db.data ||= { urls: [] };
 
 export const getUrl = (async (req, res) => {
-    await db.read();
-    const url = db.data.urls.find((item) => item.hash === req.params.urlHash);
-    if (!url) {
-      res.sendStatus(404);
+    const {shortUrl} = req.query;
+    if(shortUrl) {
+        try {
+            await db.read();
+            const url = db.data.urls.find((item) => item.shortUrl === shortUrl);
+            url ? res.send(url) : res.status(500).send({message: `${shortUrl} not found`});
+        } catch {
+            res.status(500).send({message: 'Something went wrong'});
+        }
     } else {
-      res.send(url);
+        res.status(500).send({message: 'Wrong parameters'});
     }
 });
 

@@ -12,7 +12,7 @@ router.get('/', getUrl);
 
 router.post('/', createUrl); // check if url exists and use update url 
 
-router.put('/:urlHash', updateUrl);
+router.put('/', updateUrl);
 
 router.delete('/', deleteUrl);
 

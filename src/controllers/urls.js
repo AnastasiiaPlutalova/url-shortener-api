@@ -16,7 +16,8 @@ export const getUrl = (async (req, res) => {
             await db.read();
             const url = db.data.urls.find((item) => item.shortUrl === shortUrl);
             url ? res.send(url) : res.status(500).send({message: `${shortUrl} not found`});
-        } catch {
+        } catch (e) {
+        console.log(e);
             res.status(500).send({message: 'Something went wrong'});
         }
     } else {
@@ -39,6 +40,15 @@ export const updateUrl = ((req, res) => {
     console.log('updateUrl');
 });
 
-export const deleteUrl = ((req, res) => {
-    console.log('deleteUrl');
+export const deleteUrl = (async (req, res) => {
+    const {shortUrl} = req.query;
+    try {
+        await db.read();
+        const urls = db.data.urls.filter((item) => item.shortUrl !== shortUrl);
+        db.data.urls = urls;
+        await db.write();
+        res.sendStatus(200);
+    } catch {
+        res.sendStatus(500);
+    }
 });

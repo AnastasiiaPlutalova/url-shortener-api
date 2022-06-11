@@ -14,6 +14,6 @@ router.post('/', createUrl); // check if url exists and use update url
 
 router.put('/:urlHash', updateUrl);
 
-router.delete('/:urlHash', deleteUrl);
+router.delete('/', deleteUrl);
 
 export default router;

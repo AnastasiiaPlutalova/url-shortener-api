@@ -1,20 +1,12 @@
-import { join, dirname } from 'path';
-import { Low, JSONFile } from 'lowdb';
-import { fileURLToPath } from 'url';
+import { getByShortUrl } from "./model.js";
 
 export const getUrl = (async (req, res) => {
     const { shortUrl } = req.query;
-    if (shortUrl) {
-        try {
-            await db.read();
-            const url = db.data.urls.find((item) => item.shortUrl === shortUrl);
-            url ? res.send(url) : res.status(500).send({ message: `${shortUrl} not found` });
-        } catch (e) {
-            console.log(e);
-            res.status(500).send({ message: 'Something went wrong' });
-        }
-    } else {
-        res.status(500).send({ message: 'Wrong parameters' });
+    try {
+        const url = await getByShortUrl(shortUrl);
+        res.status(200).send(url);
+    } catch ({ message }) {
+        res.status(500).send({ message });
     }
 });
 

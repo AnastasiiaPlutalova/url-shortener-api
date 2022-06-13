@@ -6,5 +6,5 @@ export default function isUrl(url) {
     }
   
     return true;
-  }
+}
   

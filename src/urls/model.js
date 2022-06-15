@@ -10,7 +10,7 @@ const db = new Low(adapter);
 
 db.data ||= { urls: [] };
 
-export const getByShortUrl = async (shortUrl) => {
+export const getUrlByShortUrl = async (shortUrl) => {
     if (isUrl(shortUrl)) {
         try {
             await db.read();

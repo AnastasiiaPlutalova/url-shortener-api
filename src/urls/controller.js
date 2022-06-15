@@ -1,4 +1,14 @@
-import { getUrlByShortUrl } from "./model.js";
+import { join, dirname } from 'path';
+import { Low, JSONFile } from 'lowdb';
+import { fileURLToPath } from 'url';
+import { getUrlByShortUrl, saveUrl } from "./model.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const file = join(__dirname, 'db.json');
+const adapter = new JSONFile(file);
+const db = new Low(adapter);
+
+db.data ||= { urls: [] };
 
 export const getUrl = (async (req, res) => {
     const { shortUrl } = req.query;
@@ -12,12 +22,10 @@ export const getUrl = (async (req, res) => {
 
 export const createUrl = (async (req, res) => {
     try {
-        await db.read();
-        db.data.urls.push({ ...req.body, statistic: [] });
-        await db.write();
+        await saveUrl(req.body);
         res.sendStatus(200);
     } catch (e) {
-        res.sendStatus(500);
+        res.status(500).send({ message });
     }
 });
 

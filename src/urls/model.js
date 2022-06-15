@@ -1,7 +1,7 @@
 import { join, dirname } from 'path';
 import { Low, JSONFile } from 'lowdb';
 import { fileURLToPath } from 'url';
-import isUrl from '../utils';
+import isUrl from '../utils/is-url.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const file = join(__dirname, 'db.json');
@@ -26,5 +26,22 @@ export const getUrlByShortUrl = async (shortUrl) => {
 
     } else {
         throw new Error("Passed short URL is not valid url");
+    }
+}
+
+export const saveUrl = async ({ originalUrl, shortUrl, statistic = [] }) => {
+    if (isUrl(originalUrl) && isUrl(shortUrl)) {
+        try {
+            const urlToSave = { originalUrl, shortUrl, statistic };
+            await db.read();
+            db.data.urls.push(urlToSave);
+            await db.write();
+
+            return urlToSave;
+        } catch (e) {
+            throw e;
+        }
+    } else {
+        throw new Error("Passed URLs are not valid");
     }
 }

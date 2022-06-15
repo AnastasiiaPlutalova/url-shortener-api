@@ -66,3 +66,18 @@ export const updateStatisticByShortUrl = async ({ shortUrl, statistic }) => {
     }
     
 }
+
+export const deleteUrlByShortUrl = async (shortUrl) => {
+    if (isUrl(shortUrl)) {
+        try {
+            await db.read();
+            const urls = db.data.urls.filter((item) => item.shortUrl !== shortUrl);
+            db.data.urls = urls;
+            await db.write();
+        } catch (e) {
+            throw e;
+        }
+    } else {
+        throw new Error("Passed short URL is not valid url");
+    }
+}

@@ -1,7 +1,7 @@
 import { join, dirname } from 'path';
 import { Low, JSONFile } from 'lowdb';
 import { fileURLToPath } from 'url';
-import { getUrlByShortUrl, saveUrl, updateStatisticByShortUrl } from "./model.js";
+import { getUrlByShortUrl, saveUrl, updateStatisticByShortUrl, deleteUrlByShortUrl } from "./model.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const file = join(__dirname, 'db.json');
@@ -41,12 +41,9 @@ export const updateUrl = (async (req, res) => {
 export const deleteUrl = (async (req, res) => {
     const { shortUrl } = req.query;
     try {
-        await db.read();
-        const urls = db.data.urls.filter((item) => item.shortUrl !== shortUrl);
-        db.data.urls = urls;
-        await db.write();
+        await deleteUrlByShortUrl(shortUrl);
         res.sendStatus(200);
-    } catch {
-        res.sendStatus(500);
+    } catch (e) {
+        res.status(500).send({ message });
     }
 });

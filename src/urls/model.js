@@ -45,3 +45,24 @@ export const saveUrl = async ({ originalUrl, shortUrl, statistic = [] }) => {
         throw new Error("Passed URLs are not valid");
     }
 }
+
+export const updateStatisticByShortUrl = async ({ shortUrl, statistic }) => {
+    if (isUrl(shortUrl) && statistic?.length > 0) {
+        try {
+            await db.read();
+            const urlIndex = db.data.urls.findIndex((item) => item.shortUrl === shortUrl);
+            if (urlIndex !== -1) {
+                db.data.urls[urlIndex].statistic = statistic;
+                await db.write();
+                return db.data.urls[urlIndex];
+            } else {
+                throw new Error('Url not found');
+            }
+        } catch (e) {
+            throw e;
+        }
+    } else {
+        throw new Error('Incorrect passed data');
+    }
+    
+}
